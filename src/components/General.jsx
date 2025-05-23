@@ -1,55 +1,40 @@
 import { useState } from "react";
 
-function Content(props) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+function Field(props) {
+  const [val, setVal] = useState("");
 
-  // const [components, setComponents] = useState([<Content key={crypto.randomUUID()}/>]);
+  return (
+    <div>
+      {!props.status ? 
+      <label>
+        {props.text}: <span> </span>
+        <input
+          type={props.type}
+          value={val}
+          onChange={(e) => setVal(e.target.value)}
+        />
+      </label> : <><h4>{props.text}: {val}</h4> </>}
+    </div>
+  );
+}
+
+function Content({status}) {
 
   return (
     <>
-      <div>
-        <label>
-          Name:{" "}
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-        </label>
-      </div>
-      <div>
-        <label>
-          Email:{" "}
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-        </label>
-      </div>
-      <div>
-        <label>
-          Phone Number:{" "}
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-        </label>
-      </div>
+      <Field text="Name" type="text" status={status}/>
+      <Field text="Email" type="email" status={status}/>
+      <Field text="Phone Number" type="tel" status={status}/>
     </>
   );
 }
 
 export default function General({ status }) {
-  console.log(status);
 
   return (
     <>
       <h2>General Information</h2>
-      <Content/>
+      <Content status={status} />
     </>
   );
 }

@@ -1,4 +1,0 @@
-
-export default CvDisplay({generalInfo}) {
-
-}

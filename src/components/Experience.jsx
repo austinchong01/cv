@@ -1,77 +1,74 @@
 import { useState } from "react";
 
-export default function Experience() {
-  const [company, setCompany] = useState("");
-  const [position, setPosition] = useState("");
-  const [desc, setDesc] = useState("");
-  const [date, setDate] = useState("");
+function Field(props) {
+  const [val, setVal] = useState("");
 
-  const [submit, setSubmit] = useState(true);
-  const toggle = (event) => {
+  return (
+    <div>
+      {!props.status ? (
+        <label>
+          {props.text}: <span> </span>
+          <input
+            type={props.type}
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+          />
+        </label>
+      ) : (
+        <>
+          <h4>
+            {props.text}: {val}
+          </h4>{" "}
+        </>
+      )}
+    </div>
+  );
+}
+
+function Content({ status }) {
+  return (
+    <>
+      <Field text="Company" type="text" status={status} />
+      <Field text="Position" type="text" status={status} />
+      <Field text="Description" type="text" status={status} />
+      <Field text="Date" type="date" status={status} />
+    </>
+  );
+}
+
+export default function Experience({ status }) {
+  const [components, setComponents] = useState([{ key: crypto.randomUUID()}]);
+
+  const add = (event) => {
     event.preventDefault();
-    setSubmit(!submit);
+    console.log("add");
+
+    setComponents([...components, { key: crypto.randomUUID()}])
+  };
+
+  const remove = (key) => {
+    event.preventDefault();
+    setComponents(components.filter(component => component.key != key));
   };
 
   return (
     <>
       <h2>Experience</h2>
-      <div>
-        <label>
-          Company:{" "}
-          {submit ? (
-            <input
-              type="text"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-            />
-          ) : (
-            <>{company}</>
-          )}
-        </label>
-      </div>
-      <div>
-        <label>
-          Position:{" "}
-          {submit ? (
-            <input
-              type="text"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-            />
-          ) : (
-            <>{position}</>
-          )}
-        </label>
-      </div>
-      <div>
-        <label>
-          Description:{" "}
-          {submit ? (
-            <input
-              type="text"
-              value={desc}
-              onChange={(e) => setDesc(e.target.value)}
-            />
-          ) : (
-            <>{desc}</>
-          )}
-        </label>
-      </div>
-      <div>
-        <label>
-          Date:{" "}
-          {submit ? (
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-          ) : (
-            <>{date}</>
-          )}
-        </label>
-      </div>
-      <button onClick={toggle}>{submit ? "Submit" : "Edit"}</button>
+      {components.map((component) => {
+        return (
+          <div key={component.key}>
+            <Content status={status} />
+            {!status && <button className="remove" onClick={() => remove(component.key)}>
+              REMOVE
+            </button>}
+          </div>
+        );
+      })}
+      {!status && <div>
+        <button className="add" onClick={add}>
+          ADD
+        </button>
+      </div>}
     </>
   );
 }
